@@ -7,6 +7,8 @@ import 'login_screen.dart';
 class SignUpscreen extends StatefulWidget {
   const SignUpscreen({super.key});
 
+  static const String name = '/signup';
+
   @override
   State<SignUpscreen> createState() => _SignUpscreenState();
 }

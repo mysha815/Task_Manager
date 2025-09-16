@@ -9,6 +9,8 @@ import 'main_nav_bar_holder_screen.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  static const String name = '/login';
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
