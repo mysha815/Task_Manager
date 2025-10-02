@@ -42,7 +42,7 @@ class _MainNavBarHolderScreenState extends State<MainNavBarHolderScreen> {
           destinations: [
             NavigationDestination(
                 icon: Icon(Icons.new_label_outlined),
-                label: 'Now'
+                label: 'New'
             ),
             NavigationDestination(
                 icon: Icon(Icons.refresh),
