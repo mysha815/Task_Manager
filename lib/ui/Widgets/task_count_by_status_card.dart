@@ -17,7 +17,7 @@ class TaskCountByStatusCard extends StatelessWidget {
         child: Column(
           children: [
             Text('$count',style: Theme.of(context).textTheme.titleLarge,),
-            Text(title,style: TextStyle(color: Colors.grey),),
+            Text('$title',style: TextStyle(color: Colors.grey),),
 
           ],
         ),

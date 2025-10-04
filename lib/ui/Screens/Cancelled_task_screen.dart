@@ -45,6 +45,8 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +61,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
           child: ListView.separated(
             itemCount: _CancelledTaskList.length,
             itemBuilder: (context,index){
-              return  TaskCard(title: 'Completed',
+              return  TaskCard(title: 'Cancelled',
                 rowcolor: Colors.blueAccent,
                 taskModel: _CancelledTaskList[index],
                 refreshParent: () {

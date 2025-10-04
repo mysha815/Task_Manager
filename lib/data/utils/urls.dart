@@ -12,4 +12,5 @@ class Urls {
   static const String completedTaskListUrl = '$_baseUrl/listTaskByStatus/Completed';
 
   static  String updateTaskStatusUrl(String id, String newStatus) => '$_baseUrl/updateTaskStatus/$id/$newStatus';
+  static  String deleteTaskStatusUrl(String id) => '$_baseUrl/deleteTask/$id';
 }
