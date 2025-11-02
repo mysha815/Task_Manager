@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/models/task_model.dart';
 import '../../data/services/api_caller.dart';
@@ -6,6 +7,7 @@ import '../../data/utils/urls.dart';
 import '../Widgets/TaskCard.dart';
 import '../Widgets/snack_ber_message.dart';
 import '../Widgets/task_count_by_status_card.dart';
+import '../controller/completed_task_list_provider.dart';
 
 class CompletedTaskScreen extends StatefulWidget {
   const CompletedTaskScreen({super.key});
@@ -17,6 +19,7 @@ class CompletedTaskScreen extends StatefulWidget {
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   bool _getCompletedTaskInProgress = false;
   List<TaskModel> _CompletedTaskList = [];
+  final CompletedProvider _completedProvider = CompletedProvider();
   @override
   void initState() {
     super.initState();
@@ -45,35 +48,42 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Visibility(
-          visible: _getCompletedTaskInProgress == false,
-          replacement: Center(
-            child: CircularProgressIndicator(),
-          ),
-          child: ListView.separated(
-            itemCount: _CompletedTaskList.length,
-            itemBuilder: (context,index){
-              return  TaskCard(title: 'Completed',
-                rowcolor: Colors.blueAccent,
-                taskModel: _CompletedTaskList[index],
-                refreshParent: () {
-                _getAllCompletedTasks();
-                },);
-            },
-            separatorBuilder: (context,index){
-              return SizedBox(height: 8,);
-            },
+    return ChangeNotifierProvider(
+      create: (_) => _completedProvider,
+      child: Scaffold(
+        body:
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Consumer<CompletedProvider>(
+            builder: (context, completedProvider, _){
+              return Visibility(
+                visible: completedProvider.completedInProgress == false,
+                replacement: Center(
+                  child: CircularProgressIndicator(),
+                ),
+                child: ListView.separated(
+                  itemCount: _CompletedTaskList.length,
+                  itemBuilder: (context,index){
+                    return  TaskCard(title: 'Completed',
+                      rowcolor: Colors.blueAccent,
+                      taskModel: _CompletedTaskList[index],
+                      refreshParent: () {
+                        _getAllCompletedTasks();
+                      },);
+                  },
+                  separatorBuilder: (context,index){
+                    return SizedBox(height: 8,);
+                  },
 
+                ),
+              );
+            } ,
           ),
         ),
+
+
+
       ),
-
-
-
     );
   }
 }

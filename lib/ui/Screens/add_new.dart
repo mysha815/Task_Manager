@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_manager/app.dart';
 import 'package:task_manager/data/services/api_caller.dart';
 import 'package:task_manager/data/utils/urls.dart';
 import 'package:task_manager/ui/Widgets/snack_ber_message.dart';
 
 import '../Widgets/tm_app_bar.dart';
+import '../controller/new_task_list_provider.dart';
 
 class AddNew extends StatefulWidget {
   const AddNew({super.key});
@@ -112,6 +115,7 @@ class _AddNewState extends State<AddNew> {
     });
 
     if (response.isSuccess){
+      context.read<NewTaskListProvder>().getNewTasks();
       _clearTextFields();
       showSnackbarMessage(context, 'New task has been added');
     }else {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_manager/data/models/task_model.dart';
 import 'package:task_manager/data/services/api_caller.dart';
 import 'package:task_manager/ui/Widgets/snack_ber_message.dart';
+import 'package:task_manager/ui/controller/cancelled_task_list_provider.dart';
 
 import '../../data/utils/urls.dart';
 import '../Widgets/TaskCard.dart';
@@ -17,6 +19,7 @@ class CancelledTaskScreen extends StatefulWidget {
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
   bool _getCancelledTaskInProgress = false;
   List<TaskModel> _CancelledTaskList = [];
+  final CancelledProvider _cancelledProvider = CancelledProvider();
   @override
   void initState() {
     super.initState();
@@ -49,35 +52,39 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child:  Visibility(
-          visible: _getCancelledTaskInProgress == false,
-          replacement: Center(
-            child: CircularProgressIndicator(),
-          ),
-          child: ListView.separated(
-            itemCount: _CancelledTaskList.length,
-            itemBuilder: (context,index){
-              return  TaskCard(title: 'Cancelled',
-                rowcolor: Colors.blueAccent,
-                taskModel: _CancelledTaskList[index],
-                refreshParent: () {
-                  _getAllCancelledTasks();
-                },);
-            },
-            separatorBuilder: (context,index){
-              return SizedBox(height: 8,);
-            },
+    return ChangeNotifierProvider(
+      create: (_) => _cancelledProvider,
+      child: Scaffold(
+        body:
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child:  Consumer<CancelledProvider>(
+            builder: (context, cancelledProvider, _){
+              return Visibility(
+                visible: cancelledProvider.cancelledInProgress == false,
+                replacement: Center(
+                  child: CircularProgressIndicator(),
+                ),
+                child: ListView.separated(
+                  itemCount: _CancelledTaskList.length,
+                  itemBuilder: (context,index){
+                    return  TaskCard(title: 'Cancelled',
+                      rowcolor: Colors.blueAccent,
+                      taskModel: _CancelledTaskList[index],
+                      refreshParent: () {
+                        _getAllCancelledTasks();
+                      },);
+                  },
+                  separatorBuilder: (context,index){
+                    return SizedBox(height: 8,);
+                  },
 
+                ),
+              );
+            },
           ),
         ),
       ),
-
-
-
     );
   }
 

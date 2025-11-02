@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/models/task_model.dart';
 import '../../data/services/api_caller.dart';
@@ -6,6 +7,7 @@ import '../../data/utils/urls.dart';
 import '../Widgets/TaskCard.dart';
 import '../Widgets/snack_ber_message.dart';
 import '../Widgets/task_count_by_status_card.dart';
+import '../controller/progress_task_list_provider.dart';
 
 class ProgressTaskScreen extends StatefulWidget {
   const ProgressTaskScreen({super.key});
@@ -17,6 +19,7 @@ class ProgressTaskScreen extends StatefulWidget {
 class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   bool _getProgressTaskInProgress = false;
   List<TaskModel> _ProgressTaskList = [];
+  final ProgressTaskListProvder _progressTaskListProvder = ProgressTaskListProvder();
 
   @override
   void initState() {
@@ -45,29 +48,36 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Visibility(
-          visible: _getProgressTaskInProgress == false,
-          replacement:Center(
-            child: CircularProgressIndicator(),
-          ),
-          child: ListView.separated(
-            itemCount: _ProgressTaskList.length,
-            itemBuilder: (context, index) {
-              return TaskCard(
-                title: 'Progress',
-                rowcolor: Colors.pinkAccent,
-                taskModel: _ProgressTaskList[index],
-                refreshParent: () {
-                  _getAllProgressTasks();
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(
-                height: 8,
+    return ChangeNotifierProvider<ProgressTaskListProvder>(
+      create: (_) => _progressTaskListProvder,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Consumer<ProgressTaskListProvder>(
+            builder: (context, progressTaskListProvder, _){
+              return Visibility(
+                visible: progressTaskListProvder.getprogressTasksInProgress == false,
+                replacement:Center(
+                  child: CircularProgressIndicator(),
+                ),
+                child: ListView.separated(
+                  itemCount: _ProgressTaskList.length,
+                  itemBuilder: (context, index) {
+                    return TaskCard(
+                      title: 'Progress',
+                      rowcolor: Colors.pinkAccent,
+                      taskModel: _ProgressTaskList[index],
+                      refreshParent: () {
+                        _getAllProgressTasks();
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 8,
+                    );
+                  },
+                ),
               );
             },
           ),
